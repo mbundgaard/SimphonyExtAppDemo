@@ -23,7 +23,7 @@ This project has been built with .NET 4.6.1, which means that any dll's from 18.
 
 In regards to debugging the Extension App, I prefer to have a few lines in the projects post-build section that moves the output to the correct ExtensionApplication folder. This way we can writeprotect the dll at the same time.
 
-Since the project is a client library it cannot be started on its own, so se the debug start action to extenal program (C:\Micros\Simphony\WebServer\ServiceHost.exe)
+Since the project is a client library it cannot be started on its own, so set the debug start action to external program (C:\Micros\Simphony\WebServer\ServiceHost.exe)
 
 Simphony will automaticly pick up the updated dll and instantiate it and you can use breakpoints and everything else that comes with Visual Studio.
 
