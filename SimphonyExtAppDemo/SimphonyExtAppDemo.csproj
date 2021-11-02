@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{13D0C24F-3F77-414F-B077-B93427269FCF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SimphonyExtAppDemo</RootNamespace>
+    <AssemblyName>SimphonyExtAppDemo</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EGatewayDB">
+      <HintPath>..\lib\EGatewayDB.dll</HintPath>
+    </Reference>
+    <Reference Include="Ops">
+      <HintPath>..\lib\Ops.dll</HintPath>
+    </Reference>
+    <Reference Include="PosCommonClasses">
+      <HintPath>..\lib\PosCommonClasses.dll</HintPath>
+    </Reference>
+    <Reference Include="PosCore, Version=2.5.0.0, Culture=neutral, PublicKeyToken=null" />
+    <Reference Include="SimphonyUtilities">
+      <HintPath>..\lib\SimphonyUtilities.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Clients\Database\DatabaseClient.cs" />
+    <Compile Include="Helpers\VersionHelper.cs" />
+    <Compile Include="Model\ClosedCheck.cs" />
+    <Compile Include="Factories\DbConnectionFactories\SimphonyDbConnectionFactory.cs" />
+    <Compile Include="Helpers\Entity.cs" />
+    <Compile Include="SimphonyExtensibilityApplication.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Debug attrib -r "C:\Micros\Simphony\WebServer\wwwroot\EGateway\Handlers\ExtensionApplications\$(ProjectName)\$(TargetFileName)"
+if $(ConfigurationName) == Debug copy  "$(TargetFileName)" "C:\Micros\Simphony\WebServer\wwwroot\EGateway\Handlers\ExtensionApplications\$(ProjectName)\$(TargetFileName)"
+if $(ConfigurationName) == Debug attrib +r "C:\Micros\Simphony\WebServer\wwwroot\EGateway\Handlers\ExtensionApplications\$(ProjectName)\$(TargetFileName)"
+if $(ConfigurationName) == Debug copy  "$(TargetName).pdb" "C:\Micros\Simphony\WebServer\wwwroot\EGateway\Handlers\ExtensionApplications\$(ProjectName)\$(TargetName).pdb"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
