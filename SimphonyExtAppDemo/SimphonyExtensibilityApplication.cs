@@ -35,7 +35,7 @@ namespace SimphonyExtAppDemo
             //    return EventProcessingInstruction.Continue;
             //};
 
-            OpsPickUpCheckEventPreview += (object s, OpsPickUpCheckEventArgs a) =>
+            OpsPickUpCheckEventPreview += (s, a) =>
             {
                 if (!_selectCheckInProgress) return EventProcessingInstruction.Continue;
 
