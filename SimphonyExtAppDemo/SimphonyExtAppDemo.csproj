@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clients\Database\DatabaseClient.cs" />
+    <Compile Include="Helpers\ReflectionHelper.cs" />
     <Compile Include="Helpers\VersionHelper.cs" />
     <Compile Include="Model\ClosedCheck.cs" />
     <Compile Include="Factories\DbConnectionFactories\SimphonyDbConnectionFactory.cs" />

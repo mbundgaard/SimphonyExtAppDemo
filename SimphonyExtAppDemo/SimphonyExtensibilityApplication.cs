@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using Micros.Ops;
 using Micros.Ops.Extensibility;
 using Micros.PosCore.Extensibility;
+using Micros.PosCore.Extensibility.Ops;
 using SimphonyExtAppDemo.Clients.Database;
 using SimphonyExtAppDemo.Helpers;
 
@@ -15,18 +18,30 @@ namespace SimphonyExtAppDemo
 
     public class SimphonyExtensibilityApplication : OpsExtensibilityApplication
     {
+        private bool _selectCheckInProgress;
+        private int _selectedCheckNumber;
+
         public SimphonyExtensibilityApplication(IExecutionContext context) : base(context)
         {
-            OpsReadyEvent += (s, a) =>
-            {
-                OpsContext.ShowMessage("OpsReadyEvent was fired, which means that Simphony is now ready to use");
-                return EventProcessingInstruction.Continue;
-            };
+            //OpsReadyEvent += (s, a) =>
+            //{
+            //    OpsContext.ShowMessage("OpsReadyEvent was fired, which means that Simphony is now ready to use (well, almost ready)");
+            //    return EventProcessingInstruction.Continue;
+            //};
 
-            OpsExitEvent += (s, a) =>
+            //OpsExitEvent += (s, a) =>
+            //{
+            //    OpsContext.ShowMessage("OpsExitEvent was fired, which means that Simphony is stopping");
+            //    return EventProcessingInstruction.Continue;
+            //};
+
+            OpsPickUpCheckEventPreview += (object s, OpsPickUpCheckEventArgs a) =>
             {
-                OpsContext.ShowMessage("OpsExitEvent was fired, which means that Simphony is stopping");
-                return EventProcessingInstruction.Continue;
+                if (!_selectCheckInProgress) return EventProcessingInstruction.Continue;
+
+                _selectedCheckNumber = (int)a.GetPropertyValue("CheckNumber");
+
+                return EventProcessingInstruction.AbortEvent;
             };
         }
 
@@ -38,6 +53,7 @@ namespace SimphonyExtAppDemo
                 {
                     case "version": Version(); break;
                     case "databasetest": DatabaseTest(arg as string); break;
+                    case "selectchecktest": SelectCheckTest(arg as string); break;
 
                     default: throw new Exception("Invalid script name");
                 }
@@ -49,6 +65,24 @@ namespace SimphonyExtAppDemo
 
             oRet = null;
             return string.Empty;
+        }
+
+        private void SelectCheckTest(string rvcNumberString)
+        {
+            if (!int.TryParse(rvcNumberString, out var rvcNumber))
+                throw new Exception("Please specify the RVC number as argument on the function call");
+
+            _selectCheckInProgress = true;
+
+            OpsContext.ProcessCommand(new OpsCommand { Command = OpsCommandType.PickUpCheckFromListRvcIndex, Index = rvcNumber });
+
+            _selectCheckInProgress = false;
+
+            if (_selectedCheckNumber != 0)
+            {
+                OpsContext.ShowMessage($"Check number {_selectedCheckNumber} was selected");
+                _selectedCheckNumber = 0;
+            }
         }
 
         private void Version()
